@@ -1,0 +1,4 @@
+[ Thu Mar  6 21:00:51 2025 ] Load weights from work_dir/ucla/baseline/runs-60-19080.pt.
+[ Thu Mar  6 21:00:52 2025 ] using warm up, epoch: 5
+[ Wed Mar 12 19:13:14 2025 ] Load weights from work_dir/ucla/baseline/runs-60-19080.pt.
+[ Wed Mar 12 19:13:16 2025 ] using warm up, epoch: 5

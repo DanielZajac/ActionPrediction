@@ -1,0 +1,4 @@
+[ Fri Feb 28 10:07:45 2025 ] Load weights from work_dir/ucla/baseline/runs-80.pt.
+[ Fri Feb 28 10:08:12 2025 ] Load weights from work_dir/ucla/baseline/runs-65-20670.pt.
+[ Thu Mar  6 18:38:54 2025 ] Load weights from work_dir/ucla/baseline/runs-60-19080.pt.
+[ Thu Mar  6 18:49:43 2025 ] Load weights from work_dir/ucla/baseline/runs-80.pt.
