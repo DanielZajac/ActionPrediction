@@ -320,6 +320,8 @@ class Processor():
                 state.update(weights)
                 self.model.load_state_dict(state)
 
+        self.short_model = Model(**self.arg.model_args)
+
     def load_optimizer(self):
         if self.arg.optimizer == 'SGD':
             self.optimizer = optim.SGD(
@@ -406,20 +408,22 @@ class Processor():
                 cutoff = int(0.2 * T_full)
                 data_short = data[:, :, :cutoff, :, :]
 
-                data_short_permuted = data_short.permute(0, 4, 1, 3, 2)
-                data_flat = data_short_permuted.reshape(-1, 1, cutoff)
-                data_resized_flat = F.interpolate(
-                    data_flat, 
-                    size=T_full, 
-                    mode='linear', 
-                    align_corners=False
-                )
+                # data_short_permuted = data_short.permute(0, 4, 1, 3, 2)
+                # data_flat = data_short_permuted.reshape(-1, 1, cutoff)
+                # data_resized_flat = F.interpolate(
+                #     data_flat, 
+                #     size=T_full, 
+                #     mode='linear', 
+                #     align_corners=False
+                # )
 
-                data_resized = data_resized_flat.view(N, M, C, V, T_full)
-                data_resized = data_resized.permute(0, 2, 4, 3, 1)
+                # data_resized = data_resized_flat.view(N, M, C, V, T_full)
+                # data_resized = data_resized.permute(0, 2, 4, 3, 1)
                 # (N, C, T_full, V, M)
 
-                short_output, short_features = self.model(data_resized)
+                # short_output, short_features = self.model(data_resized)
+
+                short_output, short_features = self.model(data_short)
                 full_output, full_features = self.model(data)
 
             #projected features from projection model
@@ -505,20 +509,23 @@ class Processor():
                     cutoff = int(0.2 * T_full)
                     data_short = data[:, :, :cutoff, :, :]
 
-                    data_short_permuted = data_short.permute(0, 4, 1, 3, 2)
-                    data_flat = data_short_permuted.reshape(-1, 1, cutoff)
-                    data_resized_flat = F.interpolate(
-                        data_flat, 
-                        size=T_full, 
-                        mode='linear', 
-                        align_corners=False
-                    )
+                    # data_short_permuted = data_short.permute(0, 4, 1, 3, 2)
+                    # data_flat = data_short_permuted.reshape(-1, 1, cutoff)
+                    # data_resized_flat = F.interpolate(
+                    #     data_flat, 
+                    #     size=T_full, 
+                    #     mode='linear', 
+                    #     align_corners=False
+                    # )
 
-                    data_resized = data_resized_flat.view(N, M, C, V, T_full)
-                    data_resized = data_resized.permute(0, 2, 4, 3, 1)
+                    # data_resized = data_resized_flat.view(N, M, C, V, T_full)
+                    # data_resized = data_resized.permute(0, 2, 4, 3, 1)
                     # (N, C, T_full, V, M)
 
-                    short_output, short_features = self.model(data_resized)
+                    # short_output, short_features = self.model(data_resized)
+
+
+                    short_output, short_features = self.model(data_short)
                     full_output, full_features = self.model(data)
 
                     projected_features = self.projection_model(short_features)
@@ -620,6 +627,14 @@ class Processor():
                 self.eval(epoch, save_score=self.arg.save_score, loader_name=['test'])
 
             # test the best model
+            weight_files = glob.glob(os.path.join(self.arg.work_dir, 'runs-'+str(self.best_acc_epoch)+'*'))
+            if len(weight_files) == 0:
+                print("No weight files found for epoch", self.best_acc_epoch)
+                print(self.arg.work_dir)
+            else:
+                weights_path = weight_files[0]
+
+
             weights_path = glob.glob(os.path.join(self.arg.work_dir, 'runs-'+str(self.best_acc_epoch)+'*'))[0]
             weights = torch.load(weights_path)
             if type(self.arg.device) is list:

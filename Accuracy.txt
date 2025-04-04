@@ -10,4 +10,4 @@ CTRGCN Trained on 20% videos:
 Best accuracy: 0.6530172413793104
 
 CTRGCN trained on full models with knowledge transfer to 20% videos:
-Best accuracy: 0.5366379310344828
+Best accuracy: Top1: 0.5948275862068966
